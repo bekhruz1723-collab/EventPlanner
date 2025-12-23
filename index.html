@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Event Planner Pro</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="style.css" />
+	</head>
+	<body>
+		<header>
+			<h1 class="header-title">EventPlanner</h1>
+
+			<div class="header-stats" title="Статистика задач">
+				<div class="stat-item">
+					<span class="stat-icon icon-done">✔</span>
+					<span id="global-done" class="stat-value">0</span>
+					<span class="stat-label">Готово</span>
+				</div>
+				<div class="stat-divider"></div>
+				<div class="stat-item">
+					<span class="stat-icon icon-todo">●</span>
+					<span id="global-todo" class="stat-value">0</span>
+					<span class="stat-label">В плане</span>
+				</div>
+			</div>
+
+			<button class="btn" onclick="openModal()">+ Создать</button>
+		</header>
+
+		<div class="container" id="events-grid"></div>
+
+		<div class="modal-overlay" id="modal">
+			<div class="modal">
+				<h2 id="modal-title">Новое событие</h2>
+				<form id="event-form">
+					<input type="hidden" id="event-id" value="" />
+
+					<div class="form-group">
+						<label>Название события</label>
+						<input
+							type="text"
+							id="title"
+							required
+							placeholder="Например: Свадьба Олега и Маши"
+						/>
+					</div>
+
+					<div class="form-group">
+						<label>Описание</label>
+						<textarea
+							id="description"
+							placeholder="Детали мероприятия..."
+						></textarea>
+					</div>
+
+					<div class="form-group">
+						<label>Фотографии (Максимум 8)</label>
+
+						<div
+							id="existing-images-wrapper"
+							style="display: none; margin-bottom: 10px"
+						>
+							<p
+								style="
+									font-size: 0.85rem;
+									color: var(--text-sec);
+									margin-bottom: 5px;
+								"
+							>
+								Текущие фото:
+							</p>
+							<div id="existing-images-grid" class="image-manager-grid"></div>
+						</div>
+
+						<div class="file-input-wrapper">
+							<input type="file" id="image-files" accept="image/*" multiple />
+							<small
+								id="upload-status"
+								style="display: block; margin-top: 5px; color: var(--text-sec)"
+							>
+								Файлы не выбраны
+							</small>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label>Дата окончания (Дедлайн)</label>
+						<input type="datetime-local" id="deadline" required />
+					</div>
+
+					<div class="form-group">
+						<label>Задачи (Чек-лист)</label>
+						<div class="steps-container" id="steps-wrapper"></div>
+						<button
+							type="button"
+							class="btn btn-add-step"
+							onclick="addStepRow()"
+						>
+							+ Добавить задачу
+						</button>
+					</div>
+
+					<div class="modal-actions">
+						<button type="button" class="btn btn-danger" onclick="closeModal()">
+							Отмена
+						</button>
+						<button type="submit" id="submit-btn" class="btn">Сохранить</button>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="modal-overlay" id="details-modal">
+			<div class="modal modal-lg">
+				<div class="modal-header-row">
+					<h2
+						id="detail-title-text"
+						style="margin: 0; padding-right: 20px"
+					></h2>
+					<span class="close-cross" onclick="closeDetailsModal()">&times;</span>
+				</div>
+
+				<div id="detail-slider-container" class="detail-slider-box"></div>
+
+				<div class="detail-content-body">
+					<p id="detail-desc-text" class="detail-text"></p>
+
+					<div class="timer-box" style="margin: 1.5rem 0">
+						<div class="timer-label">Осталось времени</div>
+						<div class="timer-val" id="detail-timer-val">...</div>
+					</div>
+
+					<div id="detail-progress-section"></div>
+					<div id="detail-checklist" class="checklist"></div>
+				</div>
+
+				<div class="modal-actions space-between">
+					<button class="btn btn-danger" id="btn-delete-event">Удалить</button>
+					<div style="display: flex; gap: 10px">
+						<button
+							class="btn btn-secondary"
+							onclick="openEditModalFromDetails()"
+						>
+							Редактировать
+						</button>
+						<button class="btn" onclick="closeDetailsModal()">Закрыть</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="script.js"></script>
+	</body>
+</html>
