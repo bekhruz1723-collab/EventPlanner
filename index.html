@@ -2,7 +2,10 @@
 <html lang="ru">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+		/>
 		<title>Event Planner Pro</title>
 		<link
 			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
@@ -16,21 +19,25 @@
 
 			<div class="header-stats">
 				<div class="stat-item">
-					<span class="stat-icon icon-done">✔</span>
+					<span class="stat-icon icon-done">✓</span>
 					<span id="global-done" class="stat-value">0</span>
-					<span class="stat-label">Готово</span>
+					<span class="stat-label" data-i18n="header_done">Готово</span>
 				</div>
 				<div class="stat-divider"></div>
 				<div class="stat-item">
-					<span class="stat-icon icon-todo">●</span>
+					<span class="stat-icon icon-todo">◉</span>
 					<span id="global-todo" class="stat-value">0</span>
-					<span class="stat-label">В плане</span>
+					<span class="stat-label" data-i18n="header_todo">В плане</span>
 				</div>
 			</div>
 
+			<button class="lang-toggle-btn" onclick="toggleLanguage()" id="lang-btn">
+				RU
+			</button>
+
 			<button class="btn" onclick="openModal()">
-                <span>+</span> Создать
-            </button>
+				<span>+</span> <span data-i18n="header_create">Создать</span>
+			</button>
 		</header>
 
 		<div class="container" id="events-grid"></div>
@@ -38,33 +45,35 @@
 		<div class="modal-overlay" id="modal">
 			<div class="modal">
 				<div class="modal-header">
-					<h2 id="modal-title">Новое событие</h2>
+					<h2 id="modal-title" data-i18n="modal_new_event">Новое событие</h2>
 				</div>
-				
+
 				<div class="modal-content-scroll">
 					<form id="event-form">
 						<input type="hidden" id="event-id" value="" />
 
 						<div class="form-group">
-							<label>Название события</label>
+							<label data-i18n="form_title">Название события</label>
 							<input
 								type="text"
 								id="title"
 								required
+								data-i18n-placeholder="form_title_placeholder"
 								placeholder="Например: Свадьба Олега и Маши"
 							/>
 						</div>
 
 						<div class="form-group">
-							<label>Описание</label>
+							<label data-i18n="form_description">Описание</label>
 							<textarea
 								id="description"
+								data-i18n-placeholder="form_desc_placeholder"
 								placeholder="Детали мероприятия, контакты, заметки..."
 							></textarea>
 						</div>
 
 						<div class="form-group">
-							<label>Фотографии (макс. 8)</label>
+							<label data-i18n="form_photos">Фотографии (макс. 8)</label>
 							<div
 								id="existing-images-wrapper"
 								style="display: none; margin-bottom: 10px"
@@ -72,10 +81,21 @@
 								<div id="existing-images-grid" class="image-manager-grid"></div>
 							</div>
 							<div class="file-input-wrapper">
-								<input type="file" id="image-files" accept="image/*" multiple style="width:100%"/>
+								<input
+									type="file"
+									id="image-files"
+									accept="image/*"
+									multiple
+									style="width: 100%"
+								/>
 								<small
 									id="upload-status"
-									style="display: block; margin-top: 5px; color: var(--text-sec)"
+									style="
+										display: block;
+										margin-top: 5px;
+										color: var(--text-sec);
+									"
+									data-i18n="form_no_files"
 								>
 									Файлы не выбраны
 								</small>
@@ -83,20 +103,20 @@
 						</div>
 
 						<div class="form-group">
-							<label>Дедлайн</label>
+							<label data-i18n="form_deadline">Дедлайн</label>
 							<input type="datetime-local" id="deadline" required />
 						</div>
 
 						<div class="form-group">
-							<label>Список задач</label>
+							<label data-i18n="form_tasks">Список задач</label>
 							<div class="steps-container" id="steps-wrapper"></div>
 							<button
 								type="button"
 								class="btn btn-add-step"
 								onclick="addStepRow()"
-								style="margin-top: 10px;"
+								style="margin-top: 10px"
 							>
-								+ Добавить задачу
+								<span data-i18n="form_add_task">+ Добавить задачу</span>
 							</button>
 						</div>
 					</form>
@@ -104,17 +124,29 @@
 
 				<div class="modal-actions">
 					<button type="button" class="btn btn-danger" onclick="closeModal()">
-						Отмена
+						<span data-i18n="btn_cancel">Отмена</span>
 					</button>
-					<button type="submit" form="event-form" id="submit-btn" class="btn">Сохранить</button>
+					<button type="submit" form="event-form" id="submit-btn" class="btn">
+						<span data-i18n="btn_save">Сохранить</span>
+					</button>
 				</div>
 			</div>
 		</div>
 
 		<div class="modal-overlay" id="details-modal">
 			<div class="modal modal-lg">
-				<div class="modal-header" style="display: flex; justify-content: space-between; align-items: flex-start;">
-					<h2 id="detail-title-text" style="line-height: 1.2; padding-right: 15px;"></h2>
+				<div
+					class="modal-header"
+					style="
+						display: flex;
+						justify-content: space-between;
+						align-items: flex-start;
+					"
+				>
+					<h2
+						id="detail-title-text"
+						style="line-height: 1.2; padding-right: 15px"
+					></h2>
 					<span class="close-cross" onclick="closeDetailsModal()">&times;</span>
 				</div>
 
@@ -123,27 +155,41 @@
 
 					<div class="detail-content-body">
 						<div class="timer-box" style="margin-bottom: 1.5rem">
-							<div class="timer-label">Осталось времени</div>
+							<div class="timer-label" data-i18n="timer_remaining">
+								Осталось времени
+							</div>
 							<div class="timer-val" id="detail-timer-val">...</div>
 						</div>
 
 						<p id="detail-desc-text" class="detail-text"></p>
 
-						<div id="detail-progress-section" style="margin-top: 20px;"></div>
-						<div id="detail-checklist" class="checklist" style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;"></div>
+						<div id="detail-progress-section" style="margin-top: 20px"></div>
+						<div
+							id="detail-checklist"
+							class="checklist"
+							style="
+								margin-top: 15px;
+								border-top: 1px solid #eee;
+								padding-top: 15px;
+							"
+						></div>
 					</div>
 				</div>
 
 				<div class="modal-actions space-between">
-					<button class="btn btn-danger" id="btn-delete-event">Удалить</button>
+					<button class="btn btn-danger" id="btn-delete-event">
+						<span data-i18n="btn_delete">Удалить</span>
+					</button>
 					<div>
 						<button
 							class="btn btn-secondary"
 							onclick="openEditModalFromDetails()"
 						>
-							Изменить
+							<span data-i18n="btn_edit">Изменить</span>
 						</button>
-						<button class="btn" onclick="closeDetailsModal()">Закрыть</button>
+						<button class="btn" onclick="closeDetailsModal()">
+							<span data-i18n="btn_close">Закрыть</span>
+						</button>
 					</div>
 				</div>
 			</div>

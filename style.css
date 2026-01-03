@@ -15,19 +15,19 @@
 	margin: 0;
 	padding: 0;
 	font-family: "Inter", sans-serif;
-	-webkit-tap-highlight-color: transparent; /* Убирает подсветку тапа на мобильных */
+	-webkit-tap-highlight-color: transparent;
 }
 
 body {
 	background-color: var(--bg);
 	color: var(--text-main);
-	padding-bottom: 80px; /* Больше отступа снизу для мобильных */
+	padding-bottom: 80px;
 }
 
 /* --- HEADER --- */
 header {
 	background: var(--card-bg);
-	padding: 0.8rem 1.5rem; /* Чуть меньше паддинг */
+	padding: 0.8rem 1.5rem;
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -46,7 +46,6 @@ h1 {
 	flex-shrink: 0;
 }
 
-/* Статистика теперь в потоке (Flexbox), а не absolute */
 .header-stats {
 	display: flex;
 	align-items: center;
@@ -103,13 +102,42 @@ h1 {
 	font-weight: 500;
 }
 
+/* Language Toggle Button */
+.lang-toggle-btn {
+	background: transparent;
+	border: 1px solid #d1d5db;
+	color: var(--primary);
+	padding: 8px 14px;
+	border-radius: 8px;
+	cursor: pointer;
+	font-weight: 700;
+	font-size: 0.9rem;
+	transition: all 0.2s ease;
+	min-width: 48px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-shrink: 0;
+}
+
+.lang-toggle-btn:hover {
+	background: var(--primary);
+	color: white;
+	border-color: var(--primary);
+	transform: translateY(-1px);
+	box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.lang-toggle-btn:active {
+	transform: translateY(0);
+}
+
 /* --- MAIN CONTAINER & GRID --- */
 .container {
 	max-width: 1200px;
 	margin: 2rem auto;
 	padding: 0 1rem;
 	display: grid;
-	/* Уменьшил minmax до 280px для узких телефонов */
 	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 	gap: 1.5rem;
 }
@@ -127,7 +155,6 @@ h1 {
 	position: relative;
 }
 
-/* На мобильных hover не нужен, но на десктопе красиво */
 @media (hover: hover) {
 	.card:hover {
 		transform: translateY(-4px);
@@ -136,7 +163,7 @@ h1 {
 }
 
 .card-img-area {
-	height: 180px; /* Фиксированная высота для аккуратности */
+	height: 180px;
 	background-color: #e5e7eb;
 	position: relative;
 	overflow: hidden;
@@ -166,7 +193,6 @@ h1 {
 	display: block;
 }
 
-/* Кнопки слайдера крупнее для пальцев */
 .slider-btn {
 	position: absolute;
 	top: 50%;
@@ -182,17 +208,20 @@ h1 {
 	align-items: center;
 	justify-content: center;
 	z-index: 2;
-	box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 	opacity: 0;
 	transition: opacity 0.2s;
 }
-/* Показываем стрелки при наведении или всегда на тач-устройствах, если нужно */
 .card-img-area:hover .slider-btn {
 	opacity: 1;
 }
 
-.prev-btn { left: 10px; }
-.next-btn { right: 10px; }
+.prev-btn {
+	left: 10px;
+}
+.next-btn {
+	right: 10px;
+}
 
 .slider-dots {
 	position: absolute;
@@ -209,7 +238,7 @@ h1 {
 	height: 6px;
 	background: rgba(255, 255, 255, 0.6);
 	border-radius: 50%;
-	box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 .dot.active {
 	background: white;
@@ -219,7 +248,7 @@ h1 {
 .card-date-badge {
 	position: absolute;
 	top: 10px;
-	left: 10px; /* Переместил влево, так привычнее */
+	left: 10px;
 	background: rgba(255, 255, 255, 0.9);
 	backdrop-filter: blur(4px);
 	padding: 4px 8px;
@@ -228,7 +257,7 @@ h1 {
 	font-weight: 700;
 	color: var(--text-main);
 	z-index: 3;
-	box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .card-body {
@@ -249,12 +278,11 @@ h1 {
 	margin-bottom: 1rem;
 	line-height: 1.5;
 	display: -webkit-box;
-	-webkit-line-clamp: 2; /* Ограничил 2 строками для компактности */
+	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 }
 
-/* Таймер */
 .timer-box {
 	background: #eef2ff;
 	padding: 8px 12px;
@@ -279,7 +307,6 @@ h1 {
 	font-variant-numeric: tabular-nums;
 }
 
-/* Прогресс бар */
 .progress-container {
 	margin-top: auto;
 	margin-bottom: 0.5rem;
@@ -316,7 +343,7 @@ h1 {
 	background-color: var(--primary);
 	color: white;
 	border: none;
-	padding: 0.7rem 1.2rem; /* Чуть больше область клика */
+	padding: 0.7rem 1.2rem;
 	border-radius: 10px;
 	cursor: pointer;
 	font-weight: 600;
@@ -351,10 +378,12 @@ h1 {
 .btn-sm {
 	padding: 0.4rem 1rem;
 	font-size: 0.85rem;
-	width: 100%; /* На мобильных кнопка "Подробнее" на всю ширину удобнее */
+	width: 100%;
 }
 @media (min-width: 480px) {
-	.btn-sm { width: auto; }
+	.btn-sm {
+		width: auto;
+	}
 }
 
 .btn-add-step {
@@ -376,7 +405,7 @@ h1 {
 	backdrop-filter: blur(3px);
 	display: flex;
 	justify-content: center;
-	align-items: center; /* Центр по дефолту */
+	align-items: center;
 	z-index: 200;
 	opacity: 0;
 	pointer-events: none;
@@ -400,20 +429,23 @@ h1 {
 	position: relative;
 }
 
-/* Анимация появления */
 @keyframes slideUp {
-	from { transform: translateY(20px); opacity: 0; }
-	to { transform: translateY(0); opacity: 1; }
+	from {
+		transform: translateY(20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
 }
 
-/* Внутренняя прокрутка модалки, чтобы шапка и кнопки были зафиксированы */
 .modal-content-scroll {
 	padding: 1.5rem 2rem;
 	overflow-y: auto;
 	flex-grow: 1;
 }
 
-/* Заголовок модалки */
 .modal-header {
 	padding: 1.5rem 2rem 0.5rem;
 	flex-shrink: 0;
@@ -423,7 +455,6 @@ h1 {
 	margin: 0;
 }
 
-/* Футер модалки */
 .modal-actions {
 	padding: 1rem 2rem 1.5rem;
 	display: flex;
@@ -445,7 +476,6 @@ h1 {
 	font-weight: 600;
 	color: var(--text-main);
 }
-/* Важно: font-size 16px предотвращает зум на iPhone при фокусе */
 .form-group input[type="text"],
 .form-group input[type="datetime-local"],
 .form-group textarea {
@@ -453,11 +483,12 @@ h1 {
 	padding: 12px;
 	border: 1px solid #d1d5db;
 	border-radius: 10px;
-	font-size: 16px; 
+	font-size: 16px;
 	background: #f9fafb;
 	transition: border-color 0.2s;
 }
-.form-group input:focus, .form-group textarea:focus {
+.form-group input:focus,
+.form-group textarea:focus {
 	outline: none;
 	border-color: var(--primary);
 	background: white;
@@ -468,7 +499,6 @@ h1 {
 	min-height: 100px;
 }
 
-/* Чеклист внутри формы */
 .steps-container {
 	display: flex;
 	flex-direction: column;
@@ -494,7 +524,6 @@ h1 {
 	font-size: 16px;
 }
 
-/* Image Manager */
 .image-manager-grid {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
@@ -518,7 +547,7 @@ h1 {
 	right: 2px;
 	width: 24px;
 	height: 24px;
-	background: rgba(0,0,0,0.5);
+	background: rgba(0, 0, 0, 0.5);
 	color: white;
 	border-radius: 50%;
 	border: none;
@@ -554,7 +583,7 @@ h1 {
 
 .checklist-item {
 	display: flex;
-	align-items: flex-start; /* Лучше, если текст длинный */
+	align-items: flex-start;
 	gap: 12px;
 	margin-bottom: 12px;
 	padding: 8px 12px;
@@ -563,7 +592,9 @@ h1 {
 	cursor: pointer;
 	transition: background 0.2s;
 }
-.checklist-item:active { background: #f3f4f6; }
+.checklist-item:active {
+	background: #f3f4f6;
+}
 .checklist-item input {
 	margin-top: 3px;
 	width: 20px;
@@ -576,9 +607,8 @@ h1 {
 	opacity: 0.8;
 }
 
-/* === АДАПТИВНОСТЬ (Mobile) === */
+/* === MOBILE RESPONSIVENESS === */
 @media (max-width: 768px) {
-	/* Header перестраивается в 2 строки */
 	header {
 		flex-wrap: wrap;
 		padding: 10px 16px;
@@ -587,14 +617,22 @@ h1 {
 	}
 	h1 {
 		font-size: 1.25rem;
-		margin-right: auto; /* Толкает все остальное вправо */
+		margin-right: auto;
 	}
-	/* Кнопка "Создать" остается справа от заголовка */
+
+	/* Language button stays visible */
+	.lang-toggle-btn {
+		order: 1;
+		padding: 6px 12px;
+		font-size: 0.85rem;
+		min-width: 44px;
+	}
+
 	header .btn {
-		order: 2; 
+		order: 2;
 		padding: 0.5rem 1rem;
 	}
-	/* Статистика уходит на новую строку на всю ширину */
+
 	.header-stats {
 		order: 3;
 		width: 100%;
@@ -609,7 +647,6 @@ h1 {
 		gap: 1rem;
 	}
 
-	/* Модальные окна на весь экран для мобильных */
 	.modal {
 		width: 100%;
 		height: 100%;
@@ -619,11 +656,15 @@ h1 {
 		display: flex;
 		flex-direction: column;
 	}
-	.modal-header { padding: 1rem 1rem 0; }
-	.modal-content-scroll { padding: 1rem; }
+	.modal-header {
+		padding: 1rem 1rem 0;
+	}
+	.modal-content-scroll {
+		padding: 1rem;
+	}
 	.modal-actions {
 		padding: 1rem;
-		flex-direction: column-reverse; /* Кнопка сохранения сверху, отмена снизу */
+		flex-direction: column-reverse;
 		border-radius: 0;
 	}
 	.modal-actions .btn {
@@ -640,6 +681,10 @@ h1 {
 		gap: 10px;
 	}
 
-	.detail-slider-box { height: 250px; }
-	.image-manager-grid { grid-template-columns: repeat(3, 1fr); }
+	.detail-slider-box {
+		height: 250px;
+	}
+	.image-manager-grid {
+		grid-template-columns: repeat(3, 1fr);
+	}
 }

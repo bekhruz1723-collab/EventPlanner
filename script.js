@@ -1,5 +1,174 @@
 const IMGBB_API_KEY = "2c1ddc5d3460afdea892c6c069777616";
 
+// === TRANSLATIONS ===
+const translations = {
+	ru: {
+		// Header
+		header_done: "Готово",
+		header_todo: "В плане",
+		header_create: "Создать",
+
+		// Modal titles
+		modal_new_event: "Новое событие",
+		modal_edit_event: "Редактировать событие",
+
+		// Form labels
+		form_title: "Название события",
+		form_title_placeholder: "Например: Свадьба Олега и Маши",
+		form_description: "Описание",
+		form_desc_placeholder: "Детали мероприятия, контакты, заметки...",
+		form_photos: "Фотографии (макс. 8)",
+		form_no_files: "Файлы не выбраны",
+		form_deadline: "Дедлайн",
+		form_tasks: "Список задач",
+		form_add_task: "+ Добавить задачу",
+		form_task_placeholder: "Задача...",
+
+		// Buttons
+		btn_cancel: "Отмена",
+		btn_save: "Сохранить",
+		btn_saving: "Сохранение...",
+		btn_delete: "Удалить",
+		btn_edit: "Изменить",
+		btn_close: "Закрыть",
+		btn_details: "Подробнее",
+
+		// Timer
+		timer_remaining: "Осталось времени",
+		timer_completed: "Завершено",
+		timer_days: "д",
+		timer_hours: "ч",
+		timer_mins: "м",
+
+		// Progress
+		progress_label: "Прогресс",
+		progress_tasks: "Задачи",
+
+		// Card/Details
+		card_created: "Создано:",
+		card_no_desc: "Нет описания",
+		card_no_photo: "Нет фото",
+		card_no_images: "Нет изображений",
+		detail_remaining: "Осталось",
+
+		// Messages
+		msg_limit_exceeded: "Лимит превышен! Сейчас фото:",
+		msg_can_add: "Вы можете добавить еще максимум",
+		msg_too_many_photos:
+			"Слишком много фотографий! Удалите старые или выберите меньше новых.",
+		msg_upload_error: "Ошибка загрузки фото. Попробуйте еще раз.",
+		msg_delete_photo:
+			"Удалить это фото? (Изменения применятся после нажатия 'Сохранить')",
+		msg_delete_event: "Вы уверены, что хотите удалить событие?",
+		msg_no_events: "Событий пока нет. Создайте новое!",
+		msg_files_selected: "Выбрано новых файлов:",
+		msg_uploading: "⏳ Загрузка фото...",
+	},
+	en: {
+		// Header
+		header_done: "Done",
+		header_todo: "To Do",
+		header_create: "Create",
+
+		// Modal titles
+		modal_new_event: "New Event",
+		modal_edit_event: "Edit Event",
+
+		// Form labels
+		form_title: "Event Title",
+		form_title_placeholder: "E.g.: John & Mary's Wedding",
+		form_description: "Description",
+		form_desc_placeholder: "Event details, contacts, notes...",
+		form_photos: "Photos (max. 8)",
+		form_no_files: "No files selected",
+		form_deadline: "Deadline",
+		form_tasks: "Task List",
+		form_add_task: "+ Add Task",
+		form_task_placeholder: "Task...",
+
+		// Buttons
+		btn_cancel: "Cancel",
+		btn_save: "Save",
+		btn_saving: "Saving...",
+		btn_delete: "Delete",
+		btn_edit: "Edit",
+		btn_close: "Close",
+		btn_details: "Details",
+
+		// Timer
+		timer_remaining: "Time Remaining",
+		timer_completed: "Completed",
+		timer_days: "d",
+		timer_hours: "h",
+		timer_mins: "m",
+
+		// Progress
+		progress_label: "Progress",
+		progress_tasks: "Tasks",
+
+		// Card/Details
+		card_created: "Created:",
+		card_no_desc: "No description",
+		card_no_photo: "No photo",
+		card_no_images: "No images",
+		detail_remaining: "Remaining",
+
+		// Messages
+		msg_limit_exceeded: "Limit exceeded! Current photos:",
+		msg_can_add: "You can add maximum",
+		msg_too_many_photos:
+			"Too many photos! Delete old ones or select fewer new ones.",
+		msg_upload_error: "Photo upload error. Please try again.",
+		msg_delete_photo:
+			"Delete this photo? (Changes will apply after clicking 'Save')",
+		msg_delete_event: "Are you sure you want to delete this event?",
+		msg_no_events: "No events yet. Create a new one!",
+		msg_files_selected: "New files selected:",
+		msg_uploading: "⏳ Uploading photos...",
+	},
+};
+
+let currentLang = localStorage.getItem("eventPlannerLang") || "ru";
+
+function t(key) {
+	return translations[currentLang][key] || key;
+}
+
+function toggleLanguage() {
+	currentLang = currentLang === "ru" ? "en" : "ru";
+	localStorage.setItem("eventPlannerLang", currentLang);
+	applyTranslations();
+	renderEvents();
+
+	// Update language button
+	const langBtn = document.getElementById("lang-btn");
+	langBtn.textContent = currentLang === "ru" ? "EN" : "RU";
+
+	// Update HTML lang attribute
+	document.documentElement.lang = currentLang;
+}
+
+function applyTranslations() {
+	// Apply translations to all elements with data-i18n
+	document.querySelectorAll("[data-i18n]").forEach((el) => {
+		const key = el.getAttribute("data-i18n");
+		el.textContent = t(key);
+	});
+
+	// Apply placeholder translations
+	document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+		const key = el.getAttribute("data-i18n-placeholder");
+		el.placeholder = t(key);
+	});
+
+	// Update step inputs placeholders
+	document.querySelectorAll(".step-input-field").forEach((el) => {
+		if (!el.value) {
+			el.placeholder = t("form_task_placeholder");
+		}
+	});
+}
+
 let events = JSON.parse(localStorage.getItem("myEvents")) || [];
 let currentSliderIndices = {};
 
@@ -23,8 +192,14 @@ const existingImagesWrapper = document.getElementById(
 const existingImagesGrid = document.getElementById("existing-images-grid");
 
 document.addEventListener("DOMContentLoaded", () => {
+	applyTranslations();
 	renderEvents();
 	setInterval(updateTimers, 1000);
+
+	// Set initial language button
+	const langBtn = document.getElementById("lang-btn");
+	langBtn.textContent = currentLang === "ru" ? "EN" : "RU";
+	document.documentElement.lang = currentLang;
 });
 
 fileInput.addEventListener("change", (e) => {
@@ -33,22 +208,24 @@ fileInput.addEventListener("change", (e) => {
 
 	if (total > 8) {
 		alert(
-			`Лимит превышен! Сейчас фото: ${
-				keptImages.length
-			}. Вы можете добавить еще максимум ${8 - keptImages.length}.`
+			`${t("msg_limit_exceeded")} ${keptImages.length}. ${t("msg_can_add")} ${
+				8 - keptImages.length
+			}.`
 		);
 		fileInput.value = "";
 		selectedNewFiles = [];
-		uploadStatus.innerText = "Файлы не выбраны";
+		uploadStatus.innerText = t("form_no_files");
 		return;
 	}
 
 	selectedNewFiles = files;
 	if (selectedNewFiles.length > 0) {
-		uploadStatus.innerText = `Выбрано новых файлов: ${selectedNewFiles.length}`;
+		uploadStatus.innerText = `${t("msg_files_selected")} ${
+			selectedNewFiles.length
+		}`;
 		uploadStatus.style.color = "var(--success)";
 	} else {
-		uploadStatus.innerText = "Файлы не выбраны";
+		uploadStatus.innerText = t("form_no_files");
 		uploadStatus.style.color = "var(--text-sec)";
 	}
 });
@@ -60,7 +237,7 @@ function openModal(editId = null) {
 	selectedNewFiles = [];
 	keptImages = [];
 	fileInput.value = "";
-	uploadStatus.innerText = "Файлы не выбраны";
+	uploadStatus.innerText = t("form_no_files");
 	uploadStatus.style.color = "var(--text-sec)";
 	stepsWrapper.innerHTML = "";
 
@@ -71,7 +248,7 @@ function openModal(editId = null) {
 			return;
 		}
 
-		document.getElementById("modal-title").innerText = "Редактировать событие";
+		document.getElementById("modal-title").innerText = t("modal_edit_event");
 		document.getElementById("event-id").value = ev.id;
 		document.getElementById("title").value = ev.title;
 		document.getElementById("description").value = ev.description;
@@ -86,7 +263,7 @@ function openModal(editId = null) {
 			addStepRow();
 		}
 	} else {
-		document.getElementById("modal-title").innerText = "Новое событие";
+		document.getElementById("modal-title").innerText = t("modal_new_event");
 		document.getElementById("event-id").value = "";
 
 		existingImagesWrapper.style.display = "none";
@@ -121,11 +298,7 @@ function renderExistingImagesManager() {
 }
 
 function removeKeptImage(index) {
-	if (
-		confirm(
-			"Удалить это фото? (Изменения применятся после нажатия 'Сохранить')"
-		)
-	) {
+	if (confirm(t("msg_delete_photo"))) {
 		keptImages.splice(index, 1);
 		renderExistingImagesManager();
 	}
@@ -138,7 +311,9 @@ function addStepRow(text = "", done = false) {
         <input type="checkbox" class="step-checkbox-edit" ${
 					done ? "checked" : ""
 				}>
-        <input type="text" class="step-input-field" placeholder="Задача..." value="${text}">
+        <input type="text" class="step-input-field" placeholder="${t(
+					"form_task_placeholder"
+				)}" value="${text}">
     `;
 	stepsWrapper.appendChild(div);
 }
@@ -147,14 +322,12 @@ form.addEventListener("submit", async (e) => {
 	e.preventDefault();
 
 	if (keptImages.length + selectedNewFiles.length > 8) {
-		alert(
-			"Слишком много фотографий! Удалите старые или выберите меньше новых."
-		);
+		alert(t("msg_too_many_photos"));
 		return;
 	}
 
 	submitBtn.disabled = true;
-	submitBtn.innerText = "Сохранение...";
+	submitBtn.querySelector("span").innerText = t("btn_saving");
 
 	const idField = document.getElementById("event-id").value;
 	const title = document.getElementById("title").value;
@@ -174,7 +347,7 @@ form.addEventListener("submit", async (e) => {
 	let finalImages = [...keptImages];
 
 	if (selectedNewFiles.length > 0) {
-		uploadStatus.innerText = "⏳ Загрузка фото...";
+		uploadStatus.innerText = t("msg_uploading");
 		try {
 			const uploadPromises = selectedNewFiles.map((file) => {
 				const formData = new FormData();
@@ -191,9 +364,9 @@ form.addEventListener("submit", async (e) => {
 			});
 		} catch (error) {
 			console.error(error);
-			alert("Ошибка загрузки фото. Попробуйте еще раз.");
+			alert(t("msg_upload_error"));
 			submitBtn.disabled = false;
-			submitBtn.innerText = "Сохранить";
+			submitBtn.querySelector("span").innerText = t("btn_save");
 			return;
 		}
 	}
@@ -233,7 +406,7 @@ form.addEventListener("submit", async (e) => {
 	}
 
 	submitBtn.disabled = false;
-	submitBtn.innerText = "Сохранить";
+	submitBtn.querySelector("span").innerText = t("btn_save");
 });
 
 function openDetails(id) {
@@ -243,7 +416,7 @@ function openDetails(id) {
 
 	document.getElementById("detail-title-text").innerText = event.title;
 	document.getElementById("detail-desc-text").innerText =
-		event.description || "Нет описания";
+		event.description || t("card_no_desc");
 	document
 		.getElementById("detail-timer-val")
 		.setAttribute("data-target", event.deadline);
@@ -265,7 +438,9 @@ function openDetails(id) {
 		const percent = Math.round((doneCount / total) * 100);
 
 		progressSection.innerHTML = `
-            <div class="progress-header"><span>Прогресс</span><span>${doneCount} / ${total}</span></div>
+            <div class="progress-header"><span>${t(
+							"progress_label"
+						)}</span><span>${doneCount} / ${total}</span></div>
             <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${percent}%"></div></div>
         `;
 
@@ -286,7 +461,7 @@ function openDetails(id) {
 
 	const delBtn = document.getElementById("btn-delete-event");
 	delBtn.onclick = () => {
-		if (confirm("Вы уверены, что хотите удалить событие?")) {
+		if (confirm(t("msg_delete_event"))) {
 			events = events.filter((e) => e.id !== id);
 			saveData();
 			closeDetailsModal();
@@ -330,8 +505,10 @@ function toggleTask(eventId, index) {
 function generateSliderHTML(id, images, isDetail = false) {
 	if (!images || images.length === 0) {
 		return isDetail
-			? `<div style="color:var(--text-sec); font-weight:500;">Нет изображений</div>`
-			: `<div class="card-no-image">Нет фото</div>`;
+			? `<div style="color:var(--text-sec); font-weight:500;">${t(
+					"card_no_images"
+			  )}</div>`
+			: `<div class="card-no-image">${t("card_no_photo")}</div>`;
 	}
 
 	const slides = images
@@ -405,7 +582,9 @@ function renderEvents() {
 	events.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
 
 	if (events.length === 0) {
-		grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-sec)"><h3>Событий пока нет. Создайте новое!</h3></div>`;
+		grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; padding: 40px; color: var(--text-sec)"><h3>${t(
+			"msg_no_events"
+		)}</h3></div>`;
 		return;
 	}
 
@@ -415,7 +594,9 @@ function renderEvents() {
 		card.className = "card";
 		card.id = `card-${event.id}`;
 
-		const createdDate = new Date(event.createdAt).toLocaleDateString("ru-RU");
+		const createdDate = new Date(event.createdAt).toLocaleDateString(
+			currentLang === "ru" ? "ru-RU" : "en-US"
+		);
 		const sliderHTML = generateSliderHTML(event.id, event.images, false);
 
 		let progressHTML = "";
@@ -425,7 +606,9 @@ function renderEvents() {
 			const pct = (done / total) * 100;
 			progressHTML = `
                 <div class="progress-container">
-                    <div class="progress-header"><span>Задачи</span><span>${done}/${total}</span></div>
+                    <div class="progress-header"><span>${t(
+											"progress_tasks"
+										)}</span><span>${done}/${total}</span></div>
                     <div class="progress-bar-bg"><div class="progress-bar-fill" style="width: ${pct}%"></div></div>
                 </div>
             `;
@@ -433,15 +616,19 @@ function renderEvents() {
 
 		card.innerHTML = `
             <div class="card-img-area" onclick="openDetails('${event.id}')">
-                <div class="card-date-badge">Создано: ${createdDate}</div>
+                <div class="card-date-badge">${t(
+									"card_created"
+								)} ${createdDate}</div>
                 ${sliderHTML}
             </div>
             <div class="card-body">
                 <h3 class="card-title">${event.title}</h3>
-                <p class="card-desc">${event.description || "Нет описания"}</p>
+                <p class="card-desc">${
+									event.description || t("card_no_desc")
+								}</p>
                 
                 <div class="timer-box">
-                    <div class="timer-label">Осталось</div>
+                    <div class="timer-label">${t("detail_remaining")}</div>
                     <div class="timer-val" id="timer-${event.id}">...</div>
                 </div>
 
@@ -450,7 +637,7 @@ function renderEvents() {
                 <div class="card-footer">
                     <button class="btn btn-sm" onclick="openDetails('${
 											event.id
-										}')">Подробнее</button>
+										}')">${t("btn_details")}</button>
                 </div>
             </div>
         `;
@@ -480,12 +667,15 @@ function updateTimers() {
 
 function getDiff(deadline, now) {
 	const dist = new Date(deadline).getTime() - now;
-	if (dist < 0) return "Завершено";
+	if (dist < 0) return t("timer_completed");
 	const d = Math.floor(dist / (1000 * 60 * 60 * 24));
 	const h = Math.floor((dist % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 	const m = Math.floor((dist % (1000 * 60 * 60)) / (1000 * 60));
-	return `${d}д ${h}ч ${m}м`;
+	return `${d}${t("timer_days")} ${h}${t("timer_hours")} ${m}${t(
+		"timer_mins"
+	)}`;
 }
+
 function updateGlobalStats() {
 	let totalDone = 0;
 	let totalTodo = 0;
@@ -511,6 +701,5 @@ function animateValue(id, end) {
 	if (!obj) return;
 	const start = parseInt(obj.innerText) || 0;
 	if (start === end) return;
-
 	obj.innerText = end;
 }
