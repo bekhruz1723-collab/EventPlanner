@@ -126,6 +126,68 @@ const translations = {
 		msg_files_selected: "New files selected:",
 		msg_uploading: "⏳ Uploading photos...",
 	},
+	uz: {
+		// Header
+		header_done: "Bajarildi",
+		header_todo: "Rejada",
+		header_create: "Yaratish",
+
+		// Modal titles
+		modal_new_event: "Yangi tadbir",
+		modal_edit_event: "Tadbirni tahrirlash",
+
+		// Form labels
+		form_title: "Tadbir nomi",
+		form_title_placeholder: "Masalan: Ali va Oyshaning to'yi",
+		form_description: "Tavsif",
+		form_desc_placeholder: "Tafsilotlar, kontaktlar, izohlar...",
+		form_photos: "Rasmlar (maks. 8)",
+		form_no_files: "Fayllar tanlanmagan",
+		form_deadline: "Muddat",
+		form_tasks: "Vazifalar ro'yxati",
+		form_add_task: "+ Vazifa qo'shish",
+		form_task_placeholder: "Vazifa...",
+
+		// Buttons
+		btn_cancel: "Bekor qilish",
+		btn_save: "Saqlash",
+		btn_saving: "Saqlanmoqda...",
+		btn_delete: "O'chirish",
+		btn_edit: "O'zgartirish",
+		btn_close: "Yopish",
+		btn_details: "Batafsil",
+
+		// Timer
+		timer_remaining: "Qolgan vaqt",
+		timer_completed: "Yakunlandi",
+		timer_days: "k",
+		timer_hours: "s",
+		timer_mins: "daq",
+
+		// Progress
+		progress_label: "Jarayon",
+		progress_tasks: "Vazifalar",
+
+		// Card/Details
+		card_created: "Yaratildi:",
+		card_no_desc: "Tavsif yo'q",
+		card_no_photo: "Rasm yo'q",
+		card_no_images: "Rasmlar yo'q",
+		detail_remaining: "Qolgan",
+
+		// Messages
+		msg_limit_exceeded: "Limit oshib ketdi! Hozirgi rasmlar:",
+		msg_can_add: "Yana qo'shishingiz mumkin:",
+		msg_too_many_photos:
+			"Rasmlar juda ko'p! Eskilarini o'chiring yoki kamroq tanlang.",
+		msg_upload_error: "Yuklashda xatolik. Qaytadan urinib ko'ring.",
+		msg_delete_photo:
+			"Bu rasmni o'chirasizmi? (O'zgarishlar 'Saqlash' bosilgandan keyin kuchga kiradi)",
+		msg_delete_event: "Tadbirni o'chirishga ishonchingiz komilmi?",
+		msg_no_events: "Hozircha tadbirlar yo'q. Yangisini yarating!",
+		msg_files_selected: "Tanlangan yangi fayllar:",
+		msg_uploading: "⏳ Rasmlar yuklanmoqda...",
+	},
 };
 
 let currentLang = localStorage.getItem("eventPlannerLang") || "ru";
@@ -135,14 +197,21 @@ function t(key) {
 }
 
 function toggleLanguage() {
-	currentLang = currentLang === "ru" ? "en" : "ru";
+	if (currentLang === "ru") {
+		currentLang = "en";
+	} else if (currentLang === "en") {
+		currentLang = "uz";
+	} else {
+		currentLang = "ru";
+	}
+
 	localStorage.setItem("eventPlannerLang", currentLang);
 	applyTranslations();
 	renderEvents();
 
 	// Update language button
 	const langBtn = document.getElementById("lang-btn");
-	langBtn.textContent = currentLang === "ru" ? "EN" : "RU";
+	langBtn.textContent = currentLang.toUpperCase();
 
 	// Update HTML lang attribute
 	document.documentElement.lang = currentLang;
@@ -198,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	// Set initial language button
 	const langBtn = document.getElementById("lang-btn");
-	langBtn.textContent = currentLang === "ru" ? "EN" : "RU";
+	langBtn.textContent = currentLang.toUpperCase();
 	document.documentElement.lang = currentLang;
 });
 
@@ -595,7 +664,7 @@ function renderEvents() {
 		card.id = `card-${event.id}`;
 
 		const createdDate = new Date(event.createdAt).toLocaleDateString(
-			currentLang === "ru" ? "ru-RU" : "en-US"
+			currentLang === "ru" ? "ru-RU" : currentLang === "uz" ? "uz-UZ" : "en-US"
 		);
 		const sliderHTML = generateSliderHTML(event.id, event.images, false);
 
